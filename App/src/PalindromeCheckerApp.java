@@ -1,30 +1,32 @@
 /**
  * =========================================================
- * MAIN CLASS - UseCase4PalindromeCheckerApp
+ * MAIN CLASS - UseCase5PalindromeCheckerApp
  * =========================================================
  *
- * Use Case 4: Character Array Based Validation
+ * Use Case 5: Stack Based Palindrome Checker
  *
  * Description:
- * This class validates a palindrome by converting
- * the string into a character array and comparing
- * characters using the two-pointer technique.
+ * This class validates a palindrome using a Stack
+ * data structure which follows the LIFO principle.
  *
  * At this stage, the application:
- * - Converts string to char array
- * - Uses start and end pointers
- * - Compares characters efficiently
+ * - Pushes characters into a stack
+ * - Pops them in reverse order
+ * - Compares with original sequence
  * - Displays the result
  *
- * This reduces extra memory usage.
+ * This maps stack behavior to reversal logic.
  *
  * @author Developer
- * @version 4.0
+ * @version 5.0
  */
+
+import java.util.Stack;
+
 public class PalindromeCheckerApp {
 
     /**
-     * Application entry point for UC4.
+     * Application entry point for UC5.
      *
      * @param args Command-line arguments
      */
@@ -34,93 +36,105 @@ public class PalindromeCheckerApp {
         // Application Header
         // ─────────────────────────────────────────────
         System.out.println("=========================================");
-        System.out.println("      PalindromeCheckerApp  v4.0        ");
-        System.out.println("  UC4: Character Array Based Validation  ");
+        System.out.println("      PalindromeCheckerApp  v5.0        ");
+        System.out.println("    UC5: Stack Based Palindrome Checker  ");
         System.out.println("=========================================");
 
         // ─────────────────────────────────────────────
-        // Step 1: Declare hardcoded test strings
+        // Step 1: Declare and initialize the input string
+        //
+        //  String literal stored in the String constant pool.
+        //  toCharArray() will be used to iterate characters.
         // ─────────────────────────────────────────────
-        String[] testWords = { "madam", "hello", "racecar", "world", "level" };
+        String input = "noon";
 
-        for (String word : testWords) {
+        System.out.println("\nInput String    : \"" + input + "\"");
 
-            System.out.println("\nChecking word   : \"" + word + "\"");
+        // ─────────────────────────────────────────────
+        // Step 2: Create a Stack to store characters
+        //
+        //  Stack<Character> uses Java's built-in Stack class.
+        //  It follows the LIFO (Last In First Out) principle:
+        //  The last character pushed will be the first popped.
+        //
+        //  Stack<>() uses diamond inference — Java infers
+        //  the generic type from the declared type on the left.
+        // ─────────────────────────────────────────────
+        Stack<Character> stack = new Stack<>();
 
-            // ─────────────────────────────────────────────
-            // Step 2: Convert String to char[]
-            //
-            //  toCharArray() converts the String into a
-            //  primitive character array (char[]).
-            //  Each character is stored at an index starting
-            //  from 0.
-            //
-            //  Example: "madam" → ['m','a','d','a','m']
-            //                       0    1    2    3    4
-            // ─────────────────────────────────────────────
-            char[] chars = word.toCharArray();
-
-            System.out.print("char[] contents : [ ");
-            for (char c : chars) {
-                System.out.print("'" + c + "' ");
-            }
-            System.out.println("]");
-
-            // ─────────────────────────────────────────────
-            // Step 3: Two-Pointer Technique
-            //
-            //  start → begins at index 0 (leftmost character)
-            //  end   → begins at last index (rightmost character)
-            //
-            //  Each iteration:
-            //    - Compare chars[start] with chars[end]
-            //    - If they differ → NOT a palindrome, break
-            //    - If they match  → move start forward, end backward
-            //    - Stop when start >= end (middle reached)
-            //
-            //  This avoids creating a reversed copy, reducing
-            //  extra memory usage. Only O(1) extra space used.
-            //  Time Complexity: O(n/2) → effectively O(n)
-            // ─────────────────────────────────────────────
-            int start = 0;
-            int end = chars.length - 1;
-            boolean isPalindrome = true;
-
-            System.out.println("-----------------------------------------");
-            System.out.println("Two-Pointer Comparison:");
-
-            while (start < end) {
-                System.out.println("  chars[" + start + "] = '" + chars[start] +
-                        "'  <-->  chars[" + end + "] = '" + chars[end] + "'");
-
-                // ─────────────────────────────────────────────
-                // Step 4: Compare characters at start and end
-                //
-                //  chars[start] != chars[end] means the string
-                //  cannot be a palindrome → set flag and break
-                // ─────────────────────────────────────────────
-                if (chars[start] != chars[end]) {
-                    isPalindrome = false;
-                    break;
-                }
-
-                // Move pointers inward
-                start++;
-                end--;
-            }
-
-            // ─────────────────────────────────────────────
-            // Step 5: Display Result
-            // ─────────────────────────────────────────────
-            System.out.println("-----------------------------------------");
-            if (isPalindrome) {
-                System.out.println("Result          : \"" + word + "\" IS a Palindrome ✔");
-            } else {
-                System.out.println("Result          : \"" + word + "\" is NOT a Palindrome ✘");
-            }
-            System.out.println("=========================================");
+        // ─────────────────────────────────────────────
+        // Step 3: Push each character of the string into the stack
+        //
+        //  toCharArray() converts String → char[]
+        //  Each character 'c' is auto-boxed from char → Character
+        //  before being pushed onto the Stack<Character>.
+        //
+        //  Example for "noon":
+        //    push('n') → stack: [n]
+        //    push('o') → stack: [n, o]
+        //    push('o') → stack: [n, o, o]
+        //    push('n') → stack: [n, o, o, n]  ← top
+        // ─────────────────────────────────────────────
+        System.out.println("\n--- Pushing characters into Stack ---");
+        for (char c : input.toCharArray()) {
+            stack.push(c);
+            System.out.println("  Pushed : '" + c + "'  →  Stack: " + stack);
         }
 
+        // ─────────────────────────────────────────────
+        // Step 4: Assume palindrome initially
+        //
+        //  Boolean flag used to track the palindrome state.
+        //  Will be set to false if any mismatch is found.
+        // ─────────────────────────────────────────────
+        boolean isPalindrome = true;
+
+        // ─────────────────────────────────────────────
+        // Step 5: Iterate again through original string
+        //         and pop characters from the stack to compare
+        //
+        //  Because Stack follows LIFO, popping returns characters
+        //  in REVERSE order — this is the reversal logic.
+        //
+        //  Each popped character is compared with the corresponding
+        //  character in the original string (left to right).
+        //
+        //  Example for "noon":
+        //    pop() → 'n'  compare with input.charAt(0) = 'n'  ✔
+        //    pop() → 'o'  compare with input.charAt(1) = 'o'  ✔
+        //    pop() → 'o'  compare with input.charAt(2) = 'o'  ✔
+        //    pop() → 'n'  compare with input.charAt(3) = 'n'  ✔
+        // ─────────────────────────────────────────────
+        System.out.println("\n--- Popping and Comparing characters ---");
+        int index = 0;
+        for (char c : input.toCharArray()) {
+            char popped = stack.pop();
+            System.out.println("  Original[" + index + "] = '" + c +
+                    "'  |  Popped = '" + popped + "'  →  " +
+                    (c == popped ? "Match ✔" : "Mismatch ✘"));
+
+            // ─────────────────────────────────────────────
+            // If the original character and the popped character
+            // do not match → string is NOT a palindrome
+            // ─────────────────────────────────────────────
+            if (c != popped) {
+                isPalindrome = false;
+                break;
+            }
+            index++;
+        }
+
+        // ─────────────────────────────────────────────
+        // Step 6: Display Result
+        // ─────────────────────────────────────────────
+        System.out.println("-----------------------------------------");
+        if (isPalindrome) {
+            System.out.println("Result          : \"" + input + "\" IS a Palindrome ✔");
+        } else {
+            System.out.println("Result          : \"" + input + "\" is NOT a Palindrome ✘");
+        }
+
+        System.out.println("=========================================");
         System.out.println("\nProgram exiting... Goodbye!");
         System.out.println("=========================================");
     }
