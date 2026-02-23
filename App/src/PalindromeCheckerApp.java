@@ -1,32 +1,39 @@
 /**
  * =========================================================
- * MAIN CLASS - UseCase5PalindromeCheckerApp
+ * MAIN CLASS - UseCase6PalindromeCheckerApp
  * =========================================================
  *
- * Use Case 5: Stack Based Palindrome Checker
+ * Use Case 6: Queue + Stack Fairness Check
  *
  * Description:
- * This class validates a palindrome using a Stack
- * data structure which follows the LIFO principle.
+ * This class demonstrates palindrome validation using
+ * two different data structures:
  *
- * At this stage, the application:
- * - Pushes characters into a stack
- * - Pops them in reverse order
- * - Compares with original sequence
- * - Displays the result
+ * - Queue (FIFO - First In First Out)
+ * - Stack (LIFO - Last In First Out)
  *
- * This maps stack behavior to reversal logic.
+ * Characters are inserted into both structures and then
+ * compared by removing from the front of the queue and
+ * the top of the stack.
+ *
+ * If all characters match, the input string is confirmed
+ * as a palindrome.
+ *
+ * This use case helps understand how FIFO and LIFO
+ * behaviors can be combined for symmetric comparison.
  *
  * @author Developer
- * @version 5.0
+ * @version 6.0
  */
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
-public class PalindromeCheckerApp {
+public class UseCase6PalindromeCheckerApp {
 
     /**
-     * Application entry point for UC5.
+     * Application entry point for UC6.
      *
      * @param args Command-line arguments
      */
@@ -36,88 +43,100 @@ public class PalindromeCheckerApp {
         // Application Header
         // ─────────────────────────────────────────────
         System.out.println("=========================================");
-        System.out.println("      PalindromeCheckerApp  v5.0        ");
-        System.out.println("    UC5: Stack Based Palindrome Checker  ");
+        System.out.println("      PalindromeCheckerApp  v6.0        ");
+        System.out.println("  UC6: Queue + Stack Fairness Check      ");
         System.out.println("=========================================");
 
         // ─────────────────────────────────────────────
         // Step 1: Declare and initialize the input string
         //
-        //  String literal stored in the String constant pool.
-        //  toCharArray() will be used to iterate characters.
+        //  A hardcoded String literal stored in the
+        //  String constant pool.
         // ─────────────────────────────────────────────
-        String input = "noon";
+        String input = "civic";
 
-        System.out.println("\nInput String    : \"" + input + "\"");
+        System.out.println("\nInput String     : \"" + input + "\"");
+        System.out.println("=========================================");
 
         // ─────────────────────────────────────────────
-        // Step 2: Create a Stack to store characters
+        // Step 2: Create a Queue and a Stack
         //
-        //  Stack<Character> uses Java's built-in Stack class.
-        //  It follows the LIFO (Last In First Out) principle:
-        //  The last character pushed will be the first popped.
+        //  Queue<Character>:
+        //    - Interface from java.util
+        //    - Implemented by LinkedList (supports FIFO ops)
+        //    - offer() / add()  → enqueue (insert at rear)
+        //    - poll() / remove() → dequeue (remove from front)
+        //    - FIFO: first character in = first character out
         //
-        //  Stack<>() uses diamond inference — Java infers
-        //  the generic type from the declared type on the left.
+        //  Stack<Character>:
+        //    - Class from java.util
+        //    - push() → insert at top
+        //    - pop()  → remove from top
+        //    - LIFO: last character in = first character out
+        //            → naturally reverses insertion order
         // ─────────────────────────────────────────────
+        Queue<Character> queue = new LinkedList<>();
         Stack<Character> stack = new Stack<>();
 
         // ─────────────────────────────────────────────
-        // Step 3: Push each character of the string into the stack
+        // Step 3: Enqueue AND Push each character
         //
-        //  toCharArray() converts String → char[]
-        //  Each character 'c' is auto-boxed from char → Character
-        //  before being pushed onto the Stack<Character>.
+        //  Both data structures receive the same characters
+        //  in the same order.
         //
-        //  Example for "noon":
-        //    push('n') → stack: [n]
-        //    push('o') → stack: [n, o]
-        //    push('o') → stack: [n, o, o]
-        //    push('n') → stack: [n, o, o, n]  ← top
+        //  Example for "civic":
+        //    Queue (FIFO): front → [c, i, v, i, c] ← rear
+        //    Stack (LIFO): bottom → [c, i, v, i, c] ← top
+        //
+        //  When we read from them:
+        //    Queue gives: c → i → v → i → c  (original order)
+        //    Stack gives: c → i → v → i → c  (reversed order)
+        //
+        //  For a palindrome, both orders are identical!
         // ─────────────────────────────────────────────
-        System.out.println("\n--- Pushing characters into Stack ---");
+        System.out.println("\n--- Enqueuing & Pushing Characters ---");
         for (char c : input.toCharArray()) {
-            stack.push(c);
-            System.out.println("  Pushed : '" + c + "'  →  Stack: " + stack);
+            queue.offer(c);   // Enqueue → adds to rear of Queue (FIFO)
+            stack.push(c);    // Push    → adds to top of Stack  (LIFO)
+            System.out.println("  Enqueued & Pushed : '" + c + "'");
         }
 
+        System.out.println("\n  Queue (FIFO) : " + queue);
+        System.out.println("  Stack (LIFO) : " + stack);
+
         // ─────────────────────────────────────────────
-        // Step 4: Assume palindrome initially
+        // Step 4: Compare — Dequeue vs Pop
         //
-        //  Boolean flag used to track the palindrome state.
-        //  Will be set to false if any mismatch is found.
+        //  queue.poll() → removes from FRONT  (original order)
+        //  stack.pop()  → removes from TOP    (reverse order)
+        //
+        //  Symmetric Comparison:
+        //    If the string is a palindrome, dequeue output
+        //    and pop output will always match character by character.
+        //
+        //    "civic"
+        //    Dequeue: c  i  v  i  c   (left → right)
+        //    Pop    : c  i  v  i  c   (right → left, reversed)
+        //    Match  : ✔  ✔  ✔  ✔  ✔
         // ─────────────────────────────────────────────
+        System.out.println("\n--- Dequeue (Queue) vs Pop (Stack) Comparison ---");
+
         boolean isPalindrome = true;
-
-        // ─────────────────────────────────────────────
-        // Step 5: Iterate again through original string
-        //         and pop characters from the stack to compare
-        //
-        //  Because Stack follows LIFO, popping returns characters
-        //  in REVERSE order — this is the reversal logic.
-        //
-        //  Each popped character is compared with the corresponding
-        //  character in the original string (left to right).
-        //
-        //  Example for "noon":
-        //    pop() → 'n'  compare with input.charAt(0) = 'n'  ✔
-        //    pop() → 'o'  compare with input.charAt(1) = 'o'  ✔
-        //    pop() → 'o'  compare with input.charAt(2) = 'o'  ✔
-        //    pop() → 'n'  compare with input.charAt(3) = 'n'  ✔
-        // ─────────────────────────────────────────────
-        System.out.println("\n--- Popping and Comparing characters ---");
         int index = 0;
-        for (char c : input.toCharArray()) {
-            char popped = stack.pop();
-            System.out.println("  Original[" + index + "] = '" + c +
-                    "'  |  Popped = '" + popped + "'  →  " +
-                    (c == popped ? "Match ✔" : "Mismatch ✘"));
+
+        while (!queue.isEmpty()) {
+            char fromQueue = queue.poll();  // Dequeue → FIFO (original order)
+            char fromStack = stack.pop();   // Pop     → LIFO (reverse order)
+
+            System.out.println("  Step [" + index + "]  Dequeued = '" + fromQueue +
+                    "'  |  Popped = '" + fromStack + "'  →  " +
+                    (fromQueue == fromStack ? "Match ✔" : "Mismatch ✘"));
 
             // ─────────────────────────────────────────────
-            // If the original character and the popped character
-            // do not match → string is NOT a palindrome
+            // If dequeued character ≠ popped character,
+            // the string is NOT a palindrome → exit early
             // ─────────────────────────────────────────────
-            if (c != popped) {
+            if (fromQueue != fromStack) {
                 isPalindrome = false;
                 break;
             }
@@ -125,13 +144,13 @@ public class PalindromeCheckerApp {
         }
 
         // ─────────────────────────────────────────────
-        // Step 6: Display Result
+        // Step 5: Display Result
         // ─────────────────────────────────────────────
         System.out.println("-----------------------------------------");
         if (isPalindrome) {
-            System.out.println("Result          : \"" + input + "\" IS a Palindrome ✔");
+            System.out.println("Result           : \"" + input + "\" IS a Palindrome ✔");
         } else {
-            System.out.println("Result          : \"" + input + "\" is NOT a Palindrome ✘");
+            System.out.println("Result           : \"" + input + "\" is NOT a Palindrome ✘");
         }
 
         System.out.println("=========================================");
