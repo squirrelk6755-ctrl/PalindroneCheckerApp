@@ -28,12 +28,13 @@ public class PalindromeCheckerApp {
     /**
      * Application entry point for UC13.
      *
-     * @param args Command-line arguments
+     * @param input String to validate
+     * @return true if palindrome, false otherwise
      */
-    public static void main(String[] args) {
+    public boolean check(String input) {
 
-        // Define the input string
-        String input = "level";
+        // Create a stack to store characters
+        java.util.Stack<Character> stack = new java.util.Stack<>();
 
         System.out.println("========================================");
         System.out.println("  UC13: Palindrome Performance Comparison");
