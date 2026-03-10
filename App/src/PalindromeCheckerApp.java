@@ -136,6 +136,10 @@ class DequeStrategy implements PalindromeStrategy {
             if (deque.removeFirst() != deque.removeLast()) {
                 return false;
             }
+
+            // Move pointers inward
+            start++;
+            end--;
         }
 
         return true;
