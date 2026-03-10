@@ -1,33 +1,32 @@
 /**
  * =========================================================
- * MAIN CLASS - UseCase8PalindromeCheckerApp
+ * MAIN CLASS - UseCase13PalindromeCheckerApp
  * =========================================================
  *
- * Use Case 8: Linked List Based Palindrome Checker
+ * Use Case 13: Performance Comparison
  *
  * Description:
- * This class checks whether a string is a palindrome
- * using a LinkedList.
+ * This class measures and compares the execution
+ * performance of palindrome validation algorithms.
  *
- * Characters are added to the list and then compared
- * by removing elements from both ends:
+ * At this stage, the application:
+ * - Uses a palindrome strategy implementation
+ * - Captures execution start and end time
+ * - Calculates total execution duration
+ * - Displays benchmarking results
  *
- * - removeFirst()
- * - removeLast()
+ * This use case focuses purely on performance
+ * measurement and algorithm comparison.
  *
- * This demonstrates how LinkedList supports
- * double-ended operations for symmetric validation.
+ * The goal is to introduce benchmarking concepts.
  *
  * @author Developer
- * @version 8.0
+ * @version 13.0
  */
-
-import java.util.LinkedList;
-
 public class PalindromeCheckerApp {
 
     /**
-     * Application entry point for UC8.
+     * Application entry point for UC13.
      *
      * @param args Command-line arguments
      */
@@ -36,30 +35,131 @@ public class PalindromeCheckerApp {
         // Define the input string
         String input = "level";
 
-        // Create a LinkedList to store characters
-        LinkedList<Character> list = new LinkedList<>();
+        System.out.println("========================================");
+        System.out.println("  UC13: Palindrome Performance Comparison");
+        System.out.println("========================================");
+        System.out.println("Input : " + input);
+        System.out.println();
 
-        // Add each character to the linked list
-        for (char c : input.toCharArray()) {
-            list.addLast(c);
+        // --- Benchmark 1: Two-Pointer Approach ---
+        long startTime1 = System.nanoTime();
+        boolean result1 = twoPointerCheck(input);
+        long endTime1 = System.nanoTime();
+        long duration1 = endTime1 - startTime1;
+
+        System.out.println("--- Two-Pointer Approach ---");
+        System.out.println("Is Palindrome?  : " + result1);
+        System.out.println("Execution Time  : " + duration1 + " ns");
+        System.out.println();
+
+        // --- Benchmark 2: Stack-Based Approach ---
+        long startTime2 = System.nanoTime();
+        boolean result2 = stackCheck(input);
+        long endTime2 = System.nanoTime();
+        long duration2 = endTime2 - startTime2;
+
+        System.out.println("--- Stack-Based Approach ---");
+        System.out.println("Is Palindrome?  : " + result2);
+        System.out.println("Execution Time  : " + duration2 + " ns");
+        System.out.println();
+
+        // --- Benchmark 3: Deque-Based Approach ---
+        long startTime3 = System.nanoTime();
+        boolean result3 = dequeCheck(input);
+        long endTime3 = System.nanoTime();
+        long duration3 = endTime3 - startTime3;
+
+        System.out.println("--- Deque-Based Approach ---");
+        System.out.println("Is Palindrome?  : " + result3);
+        System.out.println("Execution Time  : " + duration3 + " ns");
+        System.out.println();
+
+        // --- Benchmark 4: StringBuilder Reverse Approach ---
+        long startTime4 = System.nanoTime();
+        boolean result4 = stringBuilderCheck(input);
+        long endTime4 = System.nanoTime();
+        long duration4 = endTime4 - startTime4;
+
+        System.out.println("--- StringBuilder Reverse Approach ---");
+        System.out.println("Is Palindrome?  : " + result4);
+        System.out.println("Execution Time  : " + duration4 + " ns");
+        System.out.println();
+
+        // --- Summary ---
+        System.out.println("========================================");
+        System.out.println("  Summary");
+        System.out.println("========================================");
+        System.out.println("Two-Pointer     : " + duration1 + " ns");
+        System.out.println("Stack-Based     : " + duration2 + " ns");
+        System.out.println("Deque-Based     : " + duration3 + " ns");
+        System.out.println("StringBuilder   : " + duration4 + " ns");
+    }
+
+    /**
+     * Two-Pointer approach to check palindrome.
+     *
+     * @param input String to validate
+     * @return true if palindrome, false otherwise
+     */
+    private static boolean twoPointerCheck(String input) {
+        int start = 0;
+        int end = input.length() - 1;
+        while (start < end) {
+            if (input.charAt(start) != input.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
         }
+        return true;
+    }
 
-        // Flag to track palindrome state
-        boolean isPalindrome = true;
-
-        // Compare until only one or zero elements remain
-        while (list.size() > 1) {
-            char first = list.removeFirst();
-            char last = list.removeLast();
-
-            if (first != last) {
-                isPalindrome = false;
-                break;
+    /**
+     * Stack-based approach to check palindrome.
+     *
+     * @param input String to validate
+     * @return true if palindrome, false otherwise
+     */
+    private static boolean stackCheck(String input) {
+        java.util.Stack<Character> stack = new java.util.Stack<>();
+        for (char c : input.toCharArray()) {
+            stack.push(c);
+        }
+        for (char c : input.toCharArray()) {
+            if (c != stack.pop()) {
+                return false;
             }
         }
+        return true;
+    }
 
-        // Display the result
-        System.out.println("Input : " + input);
-        System.out.println("Is Palindrome? : " + isPalindrome);
+    /**
+     * Deque-based approach to check palindrome.
+     *
+     * @param input String to validate
+     * @return true if palindrome, false otherwise
+     */
+    private static boolean dequeCheck(String input) {
+        java.util.ArrayDeque<Character> deque = new java.util.ArrayDeque<>();
+        for (char c : input.toCharArray()) {
+            deque.addLast(c);
+        }
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * StringBuilder reverse approach to check palindrome.
+     *
+     * @param input String to validate
+     * @return true if palindrome, false otherwise
+     */
+    private static boolean stringBuilderCheck(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+        return input.equals(reversed);
     }
 }
