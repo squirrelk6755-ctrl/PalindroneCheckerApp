@@ -1,65 +1,80 @@
 /**
  * =========================================================
- * MAIN CLASS - UseCase8PalindromeCheckerApp
+ * MAIN CLASS - UseCase11PalindromeCheckerApp
  * =========================================================
  *
- * Use Case 8: Linked List Based Palindrome Checker
+ * Use Case 11: Object-Oriented Palindrome Service
  *
  * Description:
- * This class checks whether a string is a palindrome
- * using a LinkedList.
+ * This class demonstrates palindrome validation using
+ * object-oriented design.
  *
- * Characters are added to the list and then compared
- * by removing elements from both ends:
+ * The palindrome logic is encapsulated inside a
+ * PalindromeService class.
  *
- * - removeFirst()
- * - removeLast()
- *
- * This demonstrates how LinkedList supports
- * double-ended operations for symmetric validation.
+ * This improves:
+ * - Reusability
+ * - Readability
+ * - Separation of concerns
  *
  * @author Developer
- * @version 8.0
+ * @version 11.0
  */
-
-import java.util.LinkedList;
-
 public class PalindromeCheckerApp {
 
     /**
-     * Application entry point for UC8.
+     * Application entry point for UC11.
      *
      * @param args Command-line arguments
      */
     public static void main(String[] args) {
 
         // Define the input string
-        String input = "level";
+        String input = "racecar";
 
-        // Create a LinkedList to store characters
-        LinkedList<Character> list = new LinkedList<>();
+        // Create an instance of PalindromeService
+        PalindromeService service = new PalindromeService();
 
-        // Add each character to the linked list
-        for (char c : input.toCharArray()) {
-            list.addLast(c);
-        }
-
-        // Flag to track palindrome state
-        boolean isPalindrome = true;
-
-        // Compare until only one or zero elements remain
-        while (list.size() > 1) {
-            char first = list.removeFirst();
-            char last = list.removeLast();
-
-            if (first != last) {
-                isPalindrome = false;
-                break;
-            }
-        }
+        // Use the service to check if input is a palindrome
+        boolean result = service.checkPalindrome(input);
 
         // Display the result
-        System.out.println("Input : " + input);
-        System.out.println("Is Palindrome? : " + isPalindrome);
+        System.out.println("Input          : " + input);
+        System.out.println("Is Palindrome? : " + result);
+    }
+}
+
+/**
+ * Service class that contains palindrome logic.
+ */
+class PalindromeService {
+
+    /**
+     * Checks whether the input string is a palindrome.
+     *
+     * @param input Input string
+     * @return true if palindrome, false otherwise
+     */
+    public boolean checkPalindrome(String input) {
+
+        // Initialize pointers
+        int start = 0;
+        int end = input.length() - 1;
+
+        // Compare characters moving inward
+        while (start < end) {
+
+            // If characters don't match, not a palindrome
+            if (input.charAt(start) != input.charAt(end)) {
+                return false;
+            }
+
+            // Move pointers inward
+            start++;
+            end--;
+        }
+
+        // All characters matched
+        return true;
     }
 }
