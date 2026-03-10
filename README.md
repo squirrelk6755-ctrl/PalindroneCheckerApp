@@ -1,8 +1,6 @@
 # PalindromeCheckerApp
 
-> A console-based Java application that validates whether a given string is a palindrome under different conditions, while strengthening core programming fundamentals and data structure concepts.
-
----
+> A console-based Java application that validates whether a given string is a palindrome under different conditions, while strengthening core programming fundamentals and data structure concep
 
 ## 📋 Project Overview
 
